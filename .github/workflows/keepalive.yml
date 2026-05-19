@@ -33,8 +33,10 @@ jobs:
 
       - name: Run visit
         run: node keepalive.js
+        continue-on-error: true
 
       - name: Commit and push backup.txt
+        if: always()
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
