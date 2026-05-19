@@ -1,6 +1,8 @@
 const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
+const https = require('https');
+const http = require('http');
 
 const DOMAINS_FILE = path.join(__dirname, 'domains.txt');
 const DOWNLOAD_DIR = path.join(__dirname, 'website');
@@ -51,24 +53,48 @@ async function triggerBackupAndWait(page, baseUrl) {
 }
 
 async function downloadFile(page, zipUrl, destPath) {
-    // 使用 Playwright 下载文件
-    const downloadPromise = page.waitForEvent('download', { timeout: PAGE_TIMEOUT });
-    
-    await page.goto(zipUrl, { waitUntil: 'commit', timeout: PAGE_TIMEOUT });
-    
-    try {
-        const download = await downloadPromise;
-        await download.saveAs(destPath);
-    } catch (err) {
-        // 如果不是下载事件，直接用 page.content 获取并保存
-        const response = await page.goto(zipUrl, { waitUntil: 'networkidle', timeout: PAGE_TIMEOUT });
-        if (response && response.ok()) {
-            const buffer = await response.body();
-            fs.writeFileSync(destPath, buffer);
-        } else {
-            throw new Error('Download failed');
-        }
-    }
+    // 使用简单的 HTTP 下载（因为压缩已经通过了验证，cookie 已设置）
+    return new Promise((resolve, reject) => {
+        const protocol = zipUrl.startsWith('https') ? https : http;
+        const file = fs.createWriteStream(destPath);
+        
+        // 从 page 获取 cookies
+        page.context().cookies(zipUrl).then(cookies => {
+            const cookieHeader = cookies.map(c => `${c.name}=${c.value}`).join('; ');
+            
+            const options = {
+                headers: {
+                    'Cookie': cookieHeader,
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                }
+            };
+            
+            protocol.get(zipUrl, options, (response) => {
+                if (response.statusCode === 302 || response.statusCode === 301) {
+                    file.close();
+                    fs.unlinkSync(destPath);
+                    return downloadFile(page, response.headers.location, destPath).then(resolve).catch(reject);
+                }
+                
+                if (response.statusCode !== 200) {
+                    file.close();
+                    if (fs.existsSync(destPath)) fs.unlinkSync(destPath);
+                    return reject(new Error(`HTTP ${response.statusCode}`));
+                }
+                
+                response.pipe(file);
+                
+                file.on('finish', () => {
+                    file.close();
+                    resolve();
+                });
+            }).on('error', (err) => {
+                file.close();
+                if (fs.existsSync(destPath)) fs.unlinkSync(destPath);
+                reject(err);
+            });
+        }).catch(reject);
+    });
 }
 
 async function deleteBackup(page, baseUrl) {
