@@ -51,9 +51,11 @@ async function triggerBackupAndWait(page, baseUrl) {
 }
 
 async function downloadFile(page, zipUrl, destPath) {
-    // 使用 Playwright 的 API 直接获取文件内容
+    // 使用 Playwright 的 API 直接获取文件内容，设置无限超时
     try {
-        const response = await page.request.get(zipUrl);
+        const response = await page.request.get(zipUrl, {
+            timeout: 0  // 无限等待，不超时
+        });
         
         if (!response.ok()) {
             throw new Error(`HTTP ${response.status()}`);
