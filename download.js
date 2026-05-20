@@ -1,8 +1,6 @@
 const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
-const https = require('https');
-const http = require('http');
 
 const DOMAINS_FILE = path.join(__dirname, 'domains.txt');
 const DOWNLOAD_DIR = path.join(__dirname, 'website');
@@ -53,48 +51,19 @@ async function triggerBackupAndWait(page, baseUrl) {
 }
 
 async function downloadFile(page, zipUrl, destPath) {
-    // 使用简单的 HTTP 下载（因为压缩已经通过了验证，cookie 已设置）
-    return new Promise((resolve, reject) => {
-        const protocol = zipUrl.startsWith('https') ? https : http;
-        const file = fs.createWriteStream(destPath);
+    // 使用 Playwright 的 API 直接获取文件内容
+    try {
+        const response = await page.request.get(zipUrl);
         
-        // 从 page 获取 cookies
-        page.context().cookies(zipUrl).then(cookies => {
-            const cookieHeader = cookies.map(c => `${c.name}=${c.value}`).join('; ');
-            
-            const options = {
-                headers: {
-                    'Cookie': cookieHeader,
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-                }
-            };
-            
-            protocol.get(zipUrl, options, (response) => {
-                if (response.statusCode === 302 || response.statusCode === 301) {
-                    file.close();
-                    fs.unlinkSync(destPath);
-                    return downloadFile(page, response.headers.location, destPath).then(resolve).catch(reject);
-                }
-                
-                if (response.statusCode !== 200) {
-                    file.close();
-                    if (fs.existsSync(destPath)) fs.unlinkSync(destPath);
-                    return reject(new Error(`HTTP ${response.statusCode}`));
-                }
-                
-                response.pipe(file);
-                
-                file.on('finish', () => {
-                    file.close();
-                    resolve();
-                });
-            }).on('error', (err) => {
-                file.close();
-                if (fs.existsSync(destPath)) fs.unlinkSync(destPath);
-                reject(err);
-            });
-        }).catch(reject);
-    });
+        if (!response.ok()) {
+            throw new Error(`HTTP ${response.status()}`);
+        }
+        
+        const buffer = await response.body();
+        fs.writeFileSync(destPath, buffer);
+    } catch (err) {
+        throw new Error(`下载失败: ${err.message}`);
+    }
 }
 
 async function deleteBackup(page, baseUrl) {
@@ -133,6 +102,13 @@ async function downloadSite(browser, baseUrl) {
         
         const stats = fs.statSync(destPath);
         const sizeMB = (stats.size / 1024 / 1024).toFixed(2);
+        
+        // 检查文件大小，如果太小可能下载失败
+        if (stats.size < 1024) {
+            fs.unlinkSync(destPath);
+            throw new Error(`文件太小 (${stats.size} bytes)，可能下载失败`);
+        }
+        
         console.log(`  下载完成: ${sizeMB} MB`);
         
         // 下载完成后删除服务器上的压缩包
