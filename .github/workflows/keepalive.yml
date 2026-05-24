@@ -13,8 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Install dependencies
         run: |
@@ -23,90 +22,7 @@ jobs:
           npm install playwright
           npx playwright install chromium
 
-      - name: Run backup.js
-        run: node backup.js
-
-      - name: Upload to GitHub Release
+      - name: Run backup
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          RELEASE_TAG="backup"
-          REPO="${GITHUB_REPOSITORY}"
-
-          echo "获取 Release..."
-
-          RELEASE_INFO=$(curl -s \
-            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${REPO}/releases/tags/${RELEASE_TAG}")
-
-          RELEASE_ID=$(echo "$RELEASE_INFO" | grep -o '"id": *[0-9]*' | head -1 | grep -o '[0-9]*')
-
-          if [ -z "$RELEASE_ID" ]; then
-            echo "创建 Release..."
-
-            CREATE_RESP=$(curl -s -X POST \
-              -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-              -H "Accept: application/vnd.github+json" \
-              -H "Content-Type: application/json" \
-              "https://api.github.com/repos/${REPO}/releases" \
-              -d "{
-                \"tag_name\":\"${RELEASE_TAG}\",
-                \"name\":\"Backup\",
-                \"draft\":false,
-                \"prerelease\":false
-              }")
-
-            RELEASE_ID=$(echo "$CREATE_RESP" | grep -o '"id": *[0-9]*' | head -1 | grep -o '[0-9]*')
-          fi
-
-          if [ -z "$RELEASE_ID" ]; then
-            echo "无法获取 Release ID"
-            exit 1
-          fi
-
-          echo "Release ID: $RELEASE_ID"
-
-          for file in web/*.7z; do
-
-            [ ! -f "$file" ] && continue
-
-            filename=$(basename "$file")
-
-            echo "上传: $filename"
-
-            ASSETS=$(curl -s \
-              -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-              -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/repos/${REPO}/releases/${RELEASE_ID}/assets")
-
-            OLD_ID=$(echo "$ASSETS" | grep -B 3 "\"name\": \"$filename\"" | grep '"id"' | grep -o '[0-9]*' | head -1)
-
-            if [ -n "$OLD_ID" ]; then
-              echo "删除旧文件: $OLD_ID"
-
-              curl -s -X DELETE \
-                -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-                -H "Accept: application/vnd.github+json" \
-                "https://api.github.com/repos/${REPO}/releases/assets/${OLD_ID}"
-
-              sleep 1
-            fi
-
-            UPLOAD_RESP=$(curl -s -X POST \
-              -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-              -H "Accept: application/vnd.github+json" \
-              -H "Content-Type: application/x-7z-compressed" \
-              --data-binary @"$file" \
-              "https://uploads.github.com/repos/${REPO}/releases/${RELEASE_ID}/assets?name=${filename}")
-
-            if echo "$UPLOAD_RESP" | grep -q "browser_download_url"; then
-              echo "上传成功"
-            else
-              echo "上传失败"
-              echo "$UPLOAD_RESP"
-            fi
-
-          done
-
-          echo "全部完成"
+        run: node backup.js
