@@ -1,0 +1,26 @@
+# 格式: 站点域名|FTP地址|FTP用户|FTP密码|FTP目录
+cleaningmachine-ask.com|ftpupload.net|if0_37953882|guangzhoujunyu|htdocs #20291220
+en.xingwang168.cn|ftpupload.net|if0_38487207|Gzjunyuwanluo|en.xingwang168.cn/htdocs #20300310
+en.gzxiangtu.com|ftpupload.net|if0_41953842|Gzjunyu168|en.gzxiangtu.com/htdocs #20291226
+en.gzdphj.com|ftpupload.net|if0_37668477|guangzhoujunyu|en.gzdphj.com/htdocs #20291107
+en.flyaford.com|ftpupload.net|if0_37740320|guangzhoujuny|en.flyaford.com/htdocs #20291119
+en.gdgtzx.com|ftpupload.net|if0_41953757|Gzjunyu168|en.gdgtzx.com/htdocs #20291108
+en.hzhonglida.com|ftpupload.net|if0_37529273|guangzhoujunyu|en.hzhonglida.com/htdocs #20291017
+en.btelogistics.net|ftpupload.net|if0_37632197|guangzhoujy|en.btelogistics.net/htdocs #20291101
+en.gzsdsty.com|ftpupload.net|if0_37668403|Guangzhoujunyu|en.gzsdsty.com/htdocs
+hkmars18.com|ftpupload.net|if0_38842898|gzjunyuwl|htdocs #20250418
+en.truflourez.com|ftpupload.net|if0_37389261|guangzhoujy|en.truflourez.com/htdocs #20290930
+tengfei-compass.com|ftpupload.net|if0_37498193|Guangzhoujunyu|htdocs #20291012
+en.gzsxdl.cn|ftpupload.net|if0_41953381|Gzjunyu168|en.gzsxdl.cn/htdocs #20290926
+enweb.ketzh.com|ftpupload.net|if0_37233889|gzjunyu|enweb.ketzh.com/htdocs
+en.szbaijiyin.com|ftpupload.net|if0_41953528|Gzjunyu168|en.szbaijiyin.com/htdocs #20290926
+en.derpson.com|ftpupload.net|if0_41955101|Gzjunyu188|en.derpson.com/htdocs
+mosyeai.com|ftpupload.net|if0_41472812|gzjunyuwl|htdocs #20310422
+fcrobt.com|ftpupload.net|if0_40956075|Gzjunyu168|htdocs #20270121
+en.shangzanwifi.com|ftpupload.net|if0_41975547|gzjunyu168|en.shangzanwifi.com/htdocs
+gdheroffice.com|ftpupload.net|if0_39211600|gzjunyuwl|htdocs #20310612
+cgdiindia.com|ftpupload.net|if0_39101745|guangzhoujunyu|htdocs #20270528
+keyun-co.com|ftpupload.net|if0_39996873|gzjunyuwl|htdocs #20280919
+en.gz-siguda.com|ftpupload.net|if0_39558662|gzjunyuwanluo|en.gz-siguda.com/htdocs
+santaiwater.com|ftpupload.net|if0_39643005|gzjunyuwl|htdocs #20310804 SSL到期20261016
+sunwinpcba.com|ftpupload.net|if0_40659777|Gzjunyu168|htdocs #20301211 SSL到期20270207
