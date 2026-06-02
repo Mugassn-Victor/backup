@@ -5,14 +5,14 @@ en.flyaford.com|ftpupload.net|if0_37740320|guangzhoujuny|en.flyaford.com/htdocs 
 en.gdgtzx.com|ftpupload.net|if0_41953757|Gzjunyu168|en.gdgtzx.com/htdocs #20291108
 en.hzhonglida.com|ftpupload.net|if0_37529273|guangzhoujunyu|en.hzhonglida.com/htdocs #20291017
 en.btelogistics.net|ftpupload.net|if0_37632197|guangzhoujy|en.btelogistics.net/htdocs #20291101
-en.gzsdsty.com|ftpupload.net|if0_37668403|Guangzhoujunyu|en.gzsdsty.com/htdocs
+en.gzsdsty.com|ftpupload.net|if0_37668403|Guangzhoujunyu|en.gzsdsty.com/htdocs #20291107
 hkmars18.com|ftpupload.net|if0_38842898|gzjunyuwl|htdocs #20250418
 en.truflourez.com|ftpupload.net|if0_37389261|guangzhoujy|en.truflourez.com/htdocs #20290930
 tengfei-compass.com|ftpupload.net|if0_37498193|Guangzhoujunyu|htdocs #20291012
 en.gzsxdl.cn|ftpupload.net|if0_41953381|Gzjunyu168|en.gzsxdl.cn/htdocs #20290926
-enweb.ketzh.com|ftpupload.net|if0_37233889|gzjunyu|enweb.ketzh.com/htdocs
+enweb.ketzh.com|ftpupload.net|if0_37233889|gzjunyu|enweb.ketzh.com/htdocs #20290904
 en.szbaijiyin.com|ftpupload.net|if0_41953528|Gzjunyu168|en.szbaijiyin.com/htdocs #20290926
-en.derpson.com|ftpupload.net|if0_41955101|Gzjunyu188|en.derpson.com/htdocs
+en.derpson.com|ftpupload.net|if0_41955101|Gzjunyu188|en.derpson.com/htdocs #20300305
 mosyeai.com|ftpupload.net|if0_41472812|gzjunyuwl|htdocs #20310422
 fcrobt.com|ftpupload.net|if0_40956075|Gzjunyu168|htdocs #20280121
 en.shangzanwifi.com|ftpupload.net|if0_41975547|gzjunyu168|en.shangzanwifi.com/htdocs
