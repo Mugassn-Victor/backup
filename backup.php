@@ -1,9 +1,9 @@
 <?php
-define('DB_HOST', 'sql310.infinityfree.com');
+define('DB_HOST', '');
 define('DB_PORT', 3306);
-define('DB_USER', 'if0_37953882');
-define('DB_PASS', 'guangzhoujunyu');
-define('DB_NAME', 'if0_37953882_gzjunyu');
+define('DB_USER', '');
+define('DB_PASS', '');
+define('DB_NAME', '');
 define('DB_CHARSET', 'utf8mb4');
 
 set_time_limit(0);
