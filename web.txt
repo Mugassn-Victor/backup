@@ -23,3 +23,4 @@ en.gz-siguda.com|ftpupload.net|if0_39558662|gzjunyuwanluo|en.gz-siguda.com/htdoc
 santaiwater.com|ftpupload.net|if0_39643005|gzjunyuwl|htdocs #20310804 SSL到期20261016
 sunwinpcba.com|ftpupload.net|if0_40659777|Gzjunyu168|htdocs #20301211 SSL到期20270207
 cleaningmachine-ask.com|ftpupload.net|if0_37953882|guangzhoujunyu|htdocs #20291220
+gdjiaduoli|ftpupload.net|if0_42076555|Gzjunyu168|htdocs #20310603
