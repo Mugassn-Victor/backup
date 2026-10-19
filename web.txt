@@ -7,3 +7,13 @@
 #   - 远程 MySQL 连不上，所以 backup.js 会自动生成 backup.php 传到站点执行，
 #     备份完自动删掉(FTP 删 + 脚本自删双保险)，你不用手动放文件。
 gdheroffice.com|ftpupload.net|if0_42696483|gzjunyu168|htdocs|sql300.infinityfree.com|if0_42696483_gzjunyu
+cleaningmachine-ask.com|ftpupload.net|if0_42699401|gzjunyu168|htdocs|sql302.infinityfree.com|if0_42699401_gzjunyu
+santaiwater.com|ftpupload.net|if0_42693143|gzjunyu168|htdocs|sql301.infinityfree.com|if0_42693143_gzjunyu
+tengfei-compass.com|ftpupload.net|if0_42695452|gzjunyu1688|htdocs|sql204.infinityfree.com|if0_42695452_gzjunyu
+mosyeai.com|ftpupload.net|if0_42696062|gzjunyu168|htdocs|sql108.infinityfree.com|if0_42696062_gzjunyu
+keyun-co.com|ftpupload.net|if0_42698604|gzjunyu168|htdocs|sql105.infinityfree.com|if0_42698604_gzjunyu
+cgdiindia.com|ftpupload.net|if0_42699169|gzjunyu168|htdocs|sql112.infinityfree.com|if0_42699169_gzjunyu
+gdjiaduoli.com|ftpupload.net|if0_42699284|gzjunyu168|htdocs|sql103.infinityfree.com|if0_42699284_gzjunyu
+gotopartitionwall.com|ftpupload.net|if0_42699345|gzjunyu168|htdocs|sql113.infinityfree.com|if0_42699345_gzjunyu
+hkmars18.com|ftpupload.net|if0_42699480|gzjunyu168|htdocs|sql302.infinityfree.com|if0_42699480_gzjunyu
+en.btelogistics.net|ftpupload.net|if0_42715023|gzjunyu168|en.btelogistics.net/htdocs|sql210.infinityfree.com|if0_42715023_gzjunyu
