@@ -1,32 +1,46 @@
 <?php
-define('DB_HOST', '');
-define('DB_PORT', 3306);
-define('DB_USER', '');
-define('DB_PASS', '');
-define('DB_NAME', '');
-define('DB_CHARSET', 'utf8mb4');
+define('DB_HOST', '__DB_HOST__');
+define('DB_PORT', __DB_PORT__);
+define('DB_USER', '__DB_USER__');
+define('DB_PASS', '__DB_PASS__');
+define('DB_NAME', '__DB_NAME__');
 
 set_time_limit(0);
-ini_set('memory_limit','512M');
-
-$file = __DIR__.'/backup.sql';
+ini_set('memory_limit', '512M');
 
 header('Content-Type: text/plain; charset=utf-8');
 
-if (isset($_GET['d'])) {
-    if (!file_exists($file)) {
-        exit('no file');
+$file = __DIR__ . '/backup.sql';
+
+function finish($msg)
+{
+    echo $msg;
+    if (is_file(__FILE__)) {
+        @unlink(__FILE__);
     }
-    unlink($file);
-    exit('delete success');
+    exit;
 }
 
-$exists = file_exists($file);
+if (DB_HOST === '' || DB_USER === '' || DB_NAME === '' || strpos(DB_HOST, '__') === 0) {
+    finish('error: db config missing (template not filled)');
+}
+
+$fh = null;
 
 try {
-    $pdo = new PDO('mysql:host='.DB_HOST.';port='.DB_PORT.';dbname='.DB_NAME.';charset='.DB_CHARSET, DB_USER, DB_PASS, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+    $pdo = new PDO(
+        'mysql:host=' . DB_HOST . ';port=' . DB_PORT . ';dbname=' . DB_NAME . ';charset=utf8mb4',
+        DB_USER,
+        DB_PASS,
+        array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
+    );
+
     $fh = fopen($file, 'w');
-    fwrite($fh, "-- Database Backup\n-- Generated: ".date('Y-m-d H:i:s')."\nSET NAMES ".DB_CHARSET.";\nSET FOREIGN_KEY_CHECKS = 0;\n\n");
+    if ($fh === false) {
+        throw new Exception('cannot create backup.sql (dir not writable)');
+    }
+
+    fwrite($fh, "-- Database Backup\n-- Generated: " . date('Y-m-d H:i:s') . "\nSET NAMES utf8mb4;\nSET FOREIGN_KEY_CHECKS = 0;\n\n");
 
     foreach ($pdo->query('SHOW TABLES', PDO::FETCH_NUM) as $r) {
         $t = $r[0];
@@ -39,10 +53,12 @@ try {
         $bufsize = 0;
         foreach ($rows as $row) {
             if ($cols === null) {
-                $cols = '`'.implode('`,`', array_keys($row)).'`';
+                $cols = '`' . implode('`,`', array_keys($row)) . '`';
             }
-            $vals = array_map(function($v) use ($pdo) { return $v === null ? 'NULL' : $pdo->quote($v); }, array_values($row));
-            $line = "INSERT INTO `{$t}` ({$cols}) VALUES (".implode(',', $vals).");\n";
+            $vals = array_map(function ($v) use ($pdo) {
+                return $v === null ? 'NULL' : $pdo->quote($v);
+            }, array_values($row));
+            $line = "INSERT INTO `{$t}` ({$cols}) VALUES (" . implode(',', $vals) . ");\n";
             $buf .= $line;
             $bufsize += strlen($line);
             if ($bufsize >= 1048576) {
@@ -59,5 +75,16 @@ try {
 
     fwrite($fh, "SET FOREIGN_KEY_CHECKS = 1;\n");
     fclose($fh);
-    echo $exists ? 'overwrite backup success' : 'backup success';
-} catch (Exception $e) {}
+    $fh = null;
+
+    clearstatcache();
+    if (!file_exists($file) || filesize($file) === 0) {
+        throw new Exception('backup.sql is empty');
+    }
+    finish('backup success ' . filesize($file));
+} catch (Exception $e) {
+    if ($fh !== null && is_resource($fh)) {
+        fclose($fh);
+    }
+    finish('error: ' . $e->getMessage());
+}

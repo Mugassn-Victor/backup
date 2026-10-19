@@ -1,3 +1,11 @@
+# 格式: 域名|FTP主机|FTP用户|FTP密码|FTP远程目录|MySQL主机[:端口]|数据库名[|MySQL用户|MySQL密码]
+#   - 第 7 列(数据库名)之前留空 = 该站只备份文件、不备份数据库。
+#   - MySQL 用户名/密码 默认复用第 3、4 列的 FTP 账密(InfinityFree 规则)，
+#     不同时才填第 8、9 列覆盖。
+#   - MySQL主机/数据库名 在 InfinityFree 面板里(如 sql212.infinityfree.com / if0_43179376_gzjunyu)，
+#     每个账号不同，需要你逐个填。
+#   - 远程 MySQL 连不上，所以 backup.js 会自动生成 backup.php 传到站点执行，
+#     备份完自动删掉(FTP 删 + 脚本自删双保险)，你不用手动放文件。
 en.xingwang168.cn|ftpupload.net|if0_38487207|Gzjunyuwanluo|en.xingwang168.cn/htdocs #20300310
 en.gzxiangtu.com|ftpupload.net|if0_41953842|Gzjunyu168|en.gzxiangtu.com/htdocs #20291226
 en.gzdphj.com|ftpupload.net|if0_37668477|guangzhoujunyu|en.gzdphj.com/htdocs #20291107
