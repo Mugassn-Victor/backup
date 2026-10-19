@@ -131,14 +131,14 @@ async function ftpPut(s, localDir, remoteDir) {
     await lftp(s, `cd ${shq(remoteDir)}; put ${shq(path.join(localDir, 'backup.php'))}`);
 }
 
-async function do7z(s) {
+async function doZip(s) {
     const d = path.join(DIR, s.name);
-    const a = path.join(DIR, `${s.name}.7z`);
+    const a = path.join(DIR, `${s.name}.zip`);
     if (!fs.existsSync(d) || fs.readdirSync(d).length === 0) {
         fs.rmSync(d, { recursive: true, force: true });
         return null;
     }
-    await runCmd(s.name, `7z a -t7z -m0=lzma2 -mx=9 -mfb=273 -md=64m -ms=on "${a}" "${d}"/*`);
+    await runCmd(s.name, `7z a -tzip -mx=9 "${a}" "${d}"/*`);
     if (!fs.existsSync(a) || fs.statSync(a).size <= 1000) {
         return null;
     }
@@ -179,7 +179,7 @@ async function uploadAsset(file, releaseId) {
         const done = () => { if (!settled) { settled = true; resolve(); } };
         const req = https.request(url, {
             method: 'POST',
-            headers: { 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/x-7z-compressed', 'Content-Length': size }
+            headers: { 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/zip', 'Content-Length': size }
         }, res => {
             res.resume();
             if (res.statusCode >= 400) console.log(`  upload warn: HTTP ${res.statusCode} for ${name}`);
@@ -251,7 +251,7 @@ async function main() {
             console.log('done');
 
             process.stdout.write('  compress... ');
-            const a = await do7z(s);
+            const a = await doZip(s);
             if (a) {
                 console.log(`${(fs.statSync(a).size / 1048576).toFixed(2)} MB`);
                 process.stdout.write('  upload... ');
