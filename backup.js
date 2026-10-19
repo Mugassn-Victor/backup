@@ -207,7 +207,7 @@ async function main() {
     console.log(`sites: ${sites.length} (with db: ${sites.filter(s => s.hasDb).length})\n`);
 
     const browser = await chromium.launch({ headless: true, args: ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu'] });
-    let ok = 0, done = 0, active = 0, maxMem = 0, maxConc = 8;
+    let ok = 0, done = 0, active = 0, maxMem = 0, maxConc = 3;
     const releaseId = await ensureRelease();
 
     async function run(s) {
